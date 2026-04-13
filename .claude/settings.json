@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 30,
+            "statusMessage": "Vérification TypeScript...",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const o=JSON.parse(d);const f=(o.tool_input&&o.tool_input.file_path)||'';if(/\\.(ts|tsx)$/.test(f)){const {execSync}=require('child_process');try{const r=execSync('cd \\\"C:/Users/themi/Desktop/projets/LifeIsARealBook/sabbah-de-babel\\\" && npx tsc --noEmit 2>&1',{encoding:'utf8',shell:'bash'});if(r.trim())process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:'PostToolUse',additionalContext:'TypeScript errors:\\n'+r}}));}catch(e){process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:'PostToolUse',additionalContext:'TypeScript errors:\\n'+(e.stdout||e.message)}}));}}});\" 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}
