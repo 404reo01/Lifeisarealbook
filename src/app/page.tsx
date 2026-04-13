@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ArticleCard } from "@/components/article/ArticleCard";
+import { HeroSection } from "@/components/layout/HeroSection";
 
 async function getLatestArticles() {
   try {
@@ -29,34 +30,8 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* ─── Hero ─────────────────────────────────────────────────────── */}
-      <section className="max-w-content mx-auto px-6 pt-20 pb-16 text-center">
-        <p className="text-sm font-sans tracking-widest uppercase text-muted mb-6">
-          Chroniques littéraires
-        </p>
-        <h1 className="font-serif text-5xl md:text-6xl font-normal leading-tight text-balance mb-6">
-          Des livres lus,<br />
-          <em className="not-italic text-accent">des mots partagés.</em>
-        </h1>
-        <p className="font-sans text-base text-muted max-w-prose mx-auto leading-relaxed mb-10">
-          Critiques passionnées, listes de lecture et curiosités littéraires —
-          un regard honnête sur les livres qui comptent.
-        </p>
-        <div className="flex flex-wrap justify-center gap-3">
-          <Link
-            href="/chroniques"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-accent-fg font-sans text-sm rounded no-underline hover:opacity-90 transition-opacity"
-          >
-            Lire les chroniques
-          </Link>
-          <Link
-            href="/a-propos"
-            className="inline-flex items-center gap-2 px-5 py-2.5 border border-border font-sans text-sm rounded no-underline text-muted hover:text-foreground hover:border-foreground transition-colors"
-          >
-            À propos
-          </Link>
-        </div>
-      </section>
+      {/* ─── Hero full-screen avec fumée ──────────────────────────────── */}
+      <HeroSection />
 
       {/* ─── Séparateur ───────────────────────────────────────────────── */}
       <div className="max-w-content mx-auto px-6">
