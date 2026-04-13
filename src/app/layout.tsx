@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { EB_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 
 const ebGaramond = EB_Garamond({
   subsets: ["latin"],
@@ -43,7 +45,11 @@ export default function RootLayout({
       className={`${ebGaramond.variable} ${inter.variable}`}
     >
       <body className="antialiased">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
