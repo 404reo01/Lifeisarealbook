@@ -17,6 +17,14 @@
   --smoke-pink:  rgba(244, 114, 182, 0.30);
   --smoke-mauve: rgba(167, 139, 250, 0.28);
   --smoke-overlay: rgba(249, 246, 240, 0.45);
+
+  /* Glassmorphism — light mode */
+  --glass-bg:          rgba(255, 255, 255, 0.55);
+  --glass-bg-strong:   rgba(255, 255, 255, 0.72);
+  --glass-border:      rgba(255, 255, 255, 0.60);
+  --glass-border-soft: rgba(228, 213, 192, 0.50);
+  --glass-shadow:      0 4px 32px rgba(26, 22, 37, 0.08);
+  --glass-shadow-lg:   0 8px 48px rgba(26, 22, 37, 0.12);
 }
 
 /* ─── Dark theme ─── */
@@ -34,6 +42,14 @@
   --smoke-pink:  rgba(236, 72, 153, 0.38);
   --smoke-mauve: rgba(139, 92, 246, 0.40);
   --smoke-overlay: rgba(14, 11, 24, 0.50);
+
+  /* Glassmorphism — dark mode */
+  --glass-bg:          rgba(26, 22, 37, 0.45);
+  --glass-bg-strong:   rgba(26, 22, 37, 0.65);
+  --glass-border:      rgba(255, 255, 255, 0.08);
+  --glass-border-soft: rgba(47, 42, 77, 0.60);
+  --glass-shadow:      0 4px 32px rgba(0, 0, 0, 0.35);
+  --glass-shadow-lg:   0 8px 48px rgba(0, 0, 0, 0.50);
 }
 
 /* ─── Base styles ─── */
@@ -51,7 +67,7 @@
 
   body {
     @apply bg-background text-foreground font-serif;
-    transition: background-color 0.25s ease, color 0.25s ease;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -116,6 +132,117 @@
   }
 }
 
+@layer components {
+  /* Base glass surface */
+  .glass {
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+  }
+
+  /* Stronger glass — header, modals */
+  .glass-strong {
+    background: var(--glass-bg-strong);
+    border-color: var(--glass-border);
+    box-shadow: var(--glass-shadow-lg);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+
+  /* Subtle glow on hover for cards */
+  .glass-card {
+    background: var(--glass-bg);
+    border-color: var(--glass-border-soft);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  }
+  .glass-card:hover {
+    box-shadow: var(--glass-shadow-lg), 0 0 0 1px rgba(168, 122, 200, 0.25);
+    border-color: rgba(168, 122, 200, 0.35);
+    transform: translateY(-2px);
+  }
+}
+
+@layer components {
+  /* ─── Admin UI primitives ─── */
+  .admin-label {
+    @apply block font-sans text-xs text-muted uppercase tracking-wide mb-1.5;
+  }
+
+  .admin-input {
+    @apply w-full px-3 py-2 rounded-md border border-border font-sans text-sm text-foreground
+           focus:outline-none transition-colors duration-150;
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+  }
+  .admin-input::placeholder { color: var(--color-muted); opacity: 0.5; }
+  .admin-input:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+    opacity: 0.6;
+  }
+
+  .admin-btn-primary {
+    @apply inline-flex items-center px-4 py-2 rounded-md font-sans text-sm
+           bg-accent text-accent-fg hover:opacity-90 disabled:opacity-50
+           transition-opacity duration-150 cursor-pointer;
+  }
+
+  .admin-btn-secondary {
+    @apply inline-flex items-center px-4 py-2 rounded-md font-sans text-sm
+           border border-border text-muted hover:text-foreground
+           disabled:opacity-50 transition-colors duration-150 cursor-pointer;
+  }
+
+  /* ─── Tiptap editor content styles ─── */
+  .tiptap-editor p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    color: var(--color-muted);
+    opacity: 0.5;
+    float: left;
+    height: 0;
+    pointer-events: none;
+  }
+
+  .tiptap-editor h1 { @apply font-serif text-3xl font-normal mt-8 mb-3; }
+  .tiptap-editor h2 { @apply font-serif text-2xl font-normal mt-6 mb-2; }
+  .tiptap-editor h3 { @apply font-serif text-xl font-normal mt-5 mb-2; }
+  .tiptap-editor p  { @apply mb-4 leading-relaxed; }
+  .tiptap-editor ul { @apply list-disc pl-5 mb-4 space-y-1; }
+  .tiptap-editor ol { @apply list-decimal pl-5 mb-4 space-y-1; }
+  .tiptap-editor blockquote {
+    @apply border-l-2 border-accent pl-5 italic text-muted my-6;
+  }
+  .tiptap-editor strong { @apply font-semibold; }
+  .tiptap-editor em     { @apply italic; }
+  .tiptap-editor s      { @apply line-through; }
+  .tiptap-editor a      { @apply text-accent underline; }
+  .tiptap-editor img    { @apply rounded-lg max-w-full my-4; }
+}
+
 @layer utilities {
   .text-balance { text-wrap: balance; }
+}
+
+/* ─── Theme toggle animations ─────────────────────────────────────────────── */
+
+@keyframes spark-fly {
+  0%   { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
+  60%  { opacity: 0.7; }
+  100% { transform: translate(calc(-50% + var(--sx)), calc(-50% + var(--sy))) scale(0); opacity: 0; }
+}
+
+@keyframes ripple-out {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  100% { transform: scale(2.8); opacity: 0; }
+}
+
+@keyframes icon-enter {
+  0%   { transform: scale(0) rotate(-90deg); opacity: 0; }
+  60%  { transform: scale(1.2) rotate(8deg); opacity: 1; }
+  100% { transform: scale(1)   rotate(0deg); opacity: 1; }
 }

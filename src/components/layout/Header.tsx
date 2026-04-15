@@ -5,7 +5,7 @@ import { NavMenu } from "@/components/layout/NavMenu";
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 w-full border-b glass-strong">
       <div className="max-w-content mx-auto px-6 h-16 flex items-center justify-between gap-6">
         {/* Logo */}
         <Link href="/" className="shrink-0 no-underline hover:opacity-100">

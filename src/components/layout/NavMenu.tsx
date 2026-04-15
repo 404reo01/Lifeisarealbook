@@ -85,7 +85,7 @@ function NavItem({
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 mt-1 min-w-44 py-1 bg-surface border border-border rounded-lg shadow-lg animate-fade-in">
+        <div className="absolute top-full left-0 mt-1 min-w-44 py-1 glass border rounded-lg animate-fade-in">
           {item.children.map((child) => (
             <Link
               key={child.href}

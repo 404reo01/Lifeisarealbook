@@ -4,6 +4,8 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { CurrentReadsSidebar } from "@/components/layout/CurrentReadsSidebar";
+import { CurrentReadsSidebarWrapper } from "@/components/layout/CurrentReadsSidebarWrapper";
 
 const ebGaramond = EB_Garamond({
   subsets: ["latin"],
@@ -47,6 +49,9 @@ export default function RootLayout({
       <body className="antialiased">
         <ThemeProvider>
           <Header />
+          <CurrentReadsSidebarWrapper>
+            <CurrentReadsSidebar />
+          </CurrentReadsSidebarWrapper>
           <main>{children}</main>
           <Footer />
         </ThemeProvider>

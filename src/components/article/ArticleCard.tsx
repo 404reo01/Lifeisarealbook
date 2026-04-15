@@ -25,8 +25,7 @@ export function ArticleCard({
     <Link
       href={`/chroniques/${article.slug}`}
       className={cn(
-        "group block rounded-lg border border-border bg-surface overflow-hidden",
-        "hover:border-accent/50 transition-colors duration-200 no-underline",
+        "group block rounded-lg border glass-card overflow-hidden no-underline",
         featured && "md:col-span-2"
       )}
     >

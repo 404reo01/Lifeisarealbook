@@ -3,7 +3,7 @@ import { SmokeBackground } from "@/components/layout/SmokeBackground";
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+    <section id="hero-section" className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
 
       {/* ─── Fumée ─────────────────────────────────────────────────────── */}
       <SmokeBackground />

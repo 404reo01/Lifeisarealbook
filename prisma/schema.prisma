@@ -48,3 +48,16 @@ enum ArticleStatus {
   DRAFT
   PUBLISHED
 }
+
+// ─── En ce moment ──────────────────────────────────────────────────────────
+
+model CurrentRead {
+  id         String   @id @default(cuid())
+  reader     String   @unique // "nanou" | "cassie"
+  title      String
+  author     String
+  coverImage String?  @map("cover_image")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("current_reads")
+}
