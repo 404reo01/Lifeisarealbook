@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+
+export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
 import { ArticleCard } from "@/components/article/ArticleCard";
 import { Pagination } from "@/components/ui/Pagination";

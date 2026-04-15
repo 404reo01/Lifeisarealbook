@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { ArticleCard } from "@/components/article/ArticleCard";
 import { HeroSection } from "@/components/layout/HeroSection";
 
+export const dynamic = "force-dynamic";
+
 async function getLatestArticles() {
   try {
     return await prisma.article.findMany({
