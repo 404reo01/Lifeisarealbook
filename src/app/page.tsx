@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { ArticleCard } from "@/components/article/ArticleCard";
 import { HeroSection } from "@/components/layout/HeroSection";
 
+// Always fetch from DB — never use static build cache
 export const dynamic = "force-dynamic";
 
 async function getLatestArticles() {

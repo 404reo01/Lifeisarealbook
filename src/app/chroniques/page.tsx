@@ -6,6 +6,9 @@ import { prisma } from "@/lib/prisma";
 import { ArticleCard } from "@/components/article/ArticleCard";
 import { Pagination } from "@/components/ui/Pagination";
 
+// Always fetch from DB — never use static build cache
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Chroniques — Sabbah de Babel",
   description: "Toutes les chroniques littéraires : romans, imaginaire, jeunesse, bandes dessinées et textes anciens.",
