@@ -21,7 +21,10 @@ export function Footer() {
           </Link>
         </nav>
 
-        <p>© {new Date().getFullYear()} Sabbah de Babel</p>
+        <div className="flex flex-col items-center md:items-end gap-1">
+          <p>© {new Date().getFullYear()} Sabbah de Babel</p>
+          <p className="text-xs text-muted/50">Developed by REO</p>
+        </div>
       </div>
     </footer>
   );

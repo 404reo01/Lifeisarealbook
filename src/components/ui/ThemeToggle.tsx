@@ -28,7 +28,10 @@ export function ThemeToggle({ className }: { className?: string }) {
   const t2 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => setMounted(true), []);
-  useEffect(() => () => { t1.current && clearTimeout(t1.current); t2.current && clearTimeout(t2.current); }, []);
+  useEffect(() => () => {
+    if (t1.current) clearTimeout(t1.current);
+    if (t2.current) clearTimeout(t2.current);
+  }, []);
 
   if (!mounted) return <div className="w-9 h-9" />;
 

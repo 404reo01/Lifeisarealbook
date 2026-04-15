@@ -6,14 +6,28 @@ import TiptapImage from "@tiptap/extension-image";
 import TiptapLink from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Bold, Italic, Strikethrough, Heading1, Heading2, Heading3,
   List, ListOrdered, Quote, Link2, ImagePlus, Undo2, Redo2,
-  AlignLeft, AlignCenter, AlignRight, Unlink,
+  AlignLeft, AlignCenter, AlignRight, Unlink, Maximize2, Loader2,
 } from "lucide-react";
 import { uploadImage } from "@/lib/storage";
 import { cn } from "@/lib/utils";
+
+// Extend image with data-align attribute for positioning
+const CustomImage = TiptapImage.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      align: {
+        default: "center",
+        parseHTML: (el) => el.getAttribute("data-align") ?? "center",
+        renderHTML: (attrs) => ({ "data-align": attrs.align }),
+      },
+    };
+  },
+});
 
 interface TiptapEditorProps {
   content: string;
@@ -54,11 +68,12 @@ function Divider() {
 
 export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
 
   const editor = useEditor({
     extensions: [
       StarterKit,
-      TiptapImage.configure({ HTMLAttributes: { class: "rounded-lg max-w-full" } }),
+      CustomImage.configure({ HTMLAttributes: { class: "tiptap-img" } }),
       TiptapLink.configure({ openOnClick: false, HTMLAttributes: { class: "text-accent underline" } }),
       Placeholder.configure({ placeholder: "Commencez à écrire votre chronique…" }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
@@ -86,12 +101,25 @@ export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
   const handleImageUpload = useCallback(
     async (file: File) => {
       if (!editor) return;
+      setUploading(true);
       try {
-        const url = await uploadImage(file);
+        const url = await uploadImage(file, "covers");
         editor.chain().focus().setImage({ src: url }).run();
+        // Set default alignment after insert
+        editor.chain().focus().updateAttributes("image", { align: "center" }).run();
       } catch (err) {
         console.error("Upload failed", err);
+      } finally {
+        setUploading(false);
       }
+    },
+    [editor]
+  );
+
+  const setImageAlign = useCallback(
+    (align: "left" | "center" | "right" | "full") => {
+      if (!editor) return;
+      editor.chain().focus().updateAttributes("image", { align }).run();
     },
     [editor]
   );
@@ -194,29 +222,66 @@ export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
           </ToolbarButton>
         )}
         <ToolbarButton onClick={() => fileInputRef.current?.click()} title="Insérer une image">
-          <ImagePlus size={15} />
+          {uploading ? <Loader2 size={15} className="animate-spin" /> : <ImagePlus size={15} />}
         </ToolbarButton>
 
         <Divider />
 
-        <ToolbarButton
-          onClick={() => editor.chain().focus().setTextAlign("left").run()}
-          active={editor.isActive({ textAlign: "left" })} title="Aligner à gauche"
-        >
-          <AlignLeft size={15} />
-        </ToolbarButton>
-        <ToolbarButton
-          onClick={() => editor.chain().focus().setTextAlign("center").run()}
-          active={editor.isActive({ textAlign: "center" })} title="Centrer"
-        >
-          <AlignCenter size={15} />
-        </ToolbarButton>
-        <ToolbarButton
-          onClick={() => editor.chain().focus().setTextAlign("right").run()}
-          active={editor.isActive({ textAlign: "right" })} title="Aligner à droite"
-        >
-          <AlignRight size={15} />
-        </ToolbarButton>
+        {editor.isActive("image") ? (
+          // Image alignment toolbar — shown when an image is selected
+          <>
+            <ToolbarButton
+              onClick={() => setImageAlign("left")}
+              active={editor.getAttributes("image").align === "left"}
+              title="Image à gauche"
+            >
+              <AlignLeft size={15} />
+            </ToolbarButton>
+            <ToolbarButton
+              onClick={() => setImageAlign("center")}
+              active={editor.getAttributes("image").align === "center"}
+              title="Image centrée"
+            >
+              <AlignCenter size={15} />
+            </ToolbarButton>
+            <ToolbarButton
+              onClick={() => setImageAlign("right")}
+              active={editor.getAttributes("image").align === "right"}
+              title="Image à droite"
+            >
+              <AlignRight size={15} />
+            </ToolbarButton>
+            <ToolbarButton
+              onClick={() => setImageAlign("full")}
+              active={editor.getAttributes("image").align === "full"}
+              title="Pleine largeur"
+            >
+              <Maximize2 size={15} />
+            </ToolbarButton>
+          </>
+        ) : (
+          // Text alignment toolbar — shown otherwise
+          <>
+            <ToolbarButton
+              onClick={() => editor.chain().focus().setTextAlign("left").run()}
+              active={editor.isActive({ textAlign: "left" })} title="Aligner à gauche"
+            >
+              <AlignLeft size={15} />
+            </ToolbarButton>
+            <ToolbarButton
+              onClick={() => editor.chain().focus().setTextAlign("center").run()}
+              active={editor.isActive({ textAlign: "center" })} title="Centrer"
+            >
+              <AlignCenter size={15} />
+            </ToolbarButton>
+            <ToolbarButton
+              onClick={() => editor.chain().focus().setTextAlign("right").run()}
+              active={editor.isActive({ textAlign: "right" })} title="Aligner à droite"
+            >
+              <AlignRight size={15} />
+            </ToolbarButton>
+          </>
+        )}
       </div>
 
       {/* ─── Éditeur ─── */}

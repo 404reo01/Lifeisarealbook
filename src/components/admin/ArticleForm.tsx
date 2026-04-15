@@ -5,7 +5,6 @@ import Image from "next/image";
 import { TiptapEditor } from "@/components/admin/TiptapEditor";
 import { createArticle, updateArticle } from "@/actions/articles";
 import { uploadImage } from "@/lib/storage";
-import { cn } from "@/lib/utils";
 import type { Article, Category } from "@/types/database";
 import { Loader2, Upload } from "lucide-react";
 

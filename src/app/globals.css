@@ -221,7 +221,46 @@
   .tiptap-editor em     { @apply italic; }
   .tiptap-editor s      { @apply line-through; }
   .tiptap-editor a      { @apply text-accent underline; }
-  .tiptap-editor img    { @apply rounded-lg max-w-full my-4; }
+  /* Image alignment — editor & reading view */
+  .tiptap-editor img,
+  .prose-literary img {
+    @apply rounded-lg max-w-full my-6;
+  }
+
+  /* data-align="center" (default) */
+  .tiptap-editor img[data-align="center"],
+  .prose-literary img[data-align="center"] {
+    @apply block mx-auto;
+    max-width: 80%;
+  }
+
+  /* data-align="left" */
+  .tiptap-editor img[data-align="left"],
+  .prose-literary img[data-align="left"] {
+    float: left;
+    margin-right: 1.5rem;
+    margin-bottom: 0.5rem;
+    max-width: 45%;
+  }
+
+  /* data-align="right" */
+  .tiptap-editor img[data-align="right"],
+  .prose-literary img[data-align="right"] {
+    float: right;
+    margin-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    max-width: 45%;
+  }
+
+  /* data-align="full" */
+  .tiptap-editor img[data-align="full"],
+  .prose-literary img[data-align="full"] {
+    @apply block w-full mx-auto;
+    max-width: 100%;
+  }
+
+  /* Clear floats after floated images */
+  .prose-literary p:has(+ p) { @apply clear-both; }
 }
 
 @layer utilities {
